@@ -1,17 +1,12 @@
 import json
 import requests
 import customtkinter
-import packaging
 from urllib.parse import quote
-
-
 
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("green")
 root = customtkinter.CTk()
 root.geometry("600x400")
-
-    
 
 class User:
     def __init__(self, username, password):
@@ -22,17 +17,18 @@ user_db = [
     User(username="falka0", password="falkao01")
 ]
 
-
 cityEntry = None
 cityInfo = None
 
-def transition_to_new_page(root):
+def transition_to_new_page():
     global cityEntry, cityInfo
 
+    def search():
+        get_weather()
+        
     new_page_frame = customtkinter.CTkFrame(master=root)
     new_page_frame.pack(pady=20, padx=60, fill="both", expand=True)
 
-   
     label_new_page = customtkinter.CTkLabel(master=new_page_frame, text="The Weather App")
     label_new_page.pack(pady=12, padx=20)
 
@@ -42,10 +38,11 @@ def transition_to_new_page(root):
     cityInfo = customtkinter.CTkTextbox(master=new_page_frame)
     cityInfo.configure(state="disabled")
     cityInfo.pack(pady=12, padx=10)
+    
+    searchButton = customtkinter.CTkButton(master=new_page_frame, text="Search", command=search)
+    searchButton.pack(pady=12, padx=10)
 
-    getWeather()
-
-def getWeather():
+def get_weather():
     global cityEntry, cityInfo
 
     city = cityEntry.get().strip()
@@ -73,9 +70,6 @@ def getWeather():
     except KeyError as e:
         print(f"Key Error: {e}")
 
-
- 
-
 def login():
     entered_username = entry1.get()
     entered_password = entry2.get()
@@ -84,15 +78,10 @@ def login():
         if user.username == entered_username and user.password == entered_password:
             print("Login successful")   
             frame.destroy()
-            transition_to_new_page(root)
+            transition_to_new_page()
             return
 
     print("Error: Invalid username or password")
-
-customtkinter.set_appearance_mode("dark")
-customtkinter.set_default_color_theme("green")
-root = customtkinter.CTk()
-root.geometry("600x400")
 
 frame = customtkinter.CTkFrame(master=root)
 frame.pack(pady=20, padx=60, fill="both", expand=True)
@@ -113,4 +102,4 @@ checkbox = customtkinter.CTkCheckBox(master=frame, text="Remember Me")
 checkbox.pack(pady=12, padx=10)
 
 root.mainloop()
-
+root.quit()
